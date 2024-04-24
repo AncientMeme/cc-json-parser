@@ -28,7 +28,7 @@ class Lexer
       } 
       else if (next == '}')
       {
-        tokens.Add(new Token(TokenType.LeftCurlyBracket, "}"));
+        tokens.Add(new Token(TokenType.RightCurlyBracket, "}"));
       }
       contentIndex += 1;
     }

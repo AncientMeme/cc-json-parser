@@ -28,7 +28,7 @@ void parseJson(FileInfo? file)
   }
   catch (InvalidDataException e)
   {
-    Console.WriteLine($"Invalid JSON format: {e}");
+    Console.WriteLine($"Invalid JSON format: {e.Message}");
   }
   
 }

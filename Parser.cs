@@ -6,6 +6,7 @@ class Parser
   public Parser(List<Token> tokens) 
   {
     this.tokens = tokens;
+    PrintTokens();
     tokenIndex = 0;
   }
 
@@ -22,7 +23,6 @@ class Parser
     {
       if (PeepToken().type == TokenType.RightCurlyBracket)
       {
-        Console.WriteLine($"{PeepToken().type}");
         PopToken();
         return output;
       }
@@ -55,6 +55,14 @@ class Parser
     else 
     {
       throw new InvalidDataException("Invalid Peek: There are no more tokens left'");
+    }
+  }
+
+  private void PrintTokens()
+  {
+    foreach (Token t in tokens)
+    {
+      Console.WriteLine($"Token Type: {t.type}, Token Value: {t.value}");
     }
   }
 }
