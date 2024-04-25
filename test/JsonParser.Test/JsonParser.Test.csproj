@@ -25,4 +25,8 @@
     <ProjectReference Include="..\..\src\JsonParser\JsonParser.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="TestFiles\**\*.*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>
