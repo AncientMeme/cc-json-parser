@@ -4,7 +4,10 @@ using System.Diagnostics.CodeAnalysis;
 public enum TokenType
 {
     LeftCurlyBracket,
-    RightCurlyBracket
+    RightCurlyBracket,
+    String,
+    Colon,
+    Comma,
 }
 
 public struct Token : IEquatable<Token>
