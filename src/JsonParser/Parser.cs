@@ -1,12 +1,11 @@
 
-class Parser
+public class Parser
 {
   private List<Token> tokens;
   private int tokenIndex;
   public Parser(List<Token> tokens) 
   {
     this.tokens = tokens;
-    PrintTokens();
     tokenIndex = 0;
   }
 

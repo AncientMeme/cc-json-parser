@@ -19,7 +19,14 @@ void parseJson(FileInfo? file)
     return;
   }
 
-  var lexer = new Lexer(file);
+  string content;
+  using(var fileStream = file.OpenRead())
+  using(var sr = new StreamReader(fileStream)) 
+  {
+    content = sr.ReadToEnd();
+  }
+
+  var lexer = new Lexer(content);
   var tokens = lexer.GetTokens();
   var parser = new Parser(tokens);
   try 

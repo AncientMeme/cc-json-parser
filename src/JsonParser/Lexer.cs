@@ -1,17 +1,11 @@
 
-using System.CommandLine.Parsing;
-
-class Lexer 
+public class Lexer 
 {
   private string content;
   private int contentIndex;
-  public Lexer(FileInfo file) 
+  public Lexer(string content) 
   {
-    using(var fileStream = file.OpenRead())
-    using(var sr = new StreamReader(fileStream)) 
-    {
-      content = sr.ReadToEnd();
-    }
+    this.content = content;
     contentIndex = 0;
   }
 
