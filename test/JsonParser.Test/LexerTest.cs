@@ -84,6 +84,51 @@ namespace LexerUnitTest
       }
     }
 
+    [Theory]
+    [JsonData("TestFIles/Collections/valid2.json")]
+    public void ComplexJsonTest(string content)
+    {
+      // Arrange
+      var lexer = new Lexer(content);
+      // Act
+      List<Token> tokens = lexer.GetTokens();
+      // Assert: All tokens should match
+      List<Token> expectedTokens = new List<Token>
+      {
+        new Token(TokenType.LeftCurlyBracket, "{"),
+        new Token(TokenType.String, "key"),
+        new Token(TokenType.Colon, ":"),
+        new Token(TokenType.String, "value"),
+        new Token(TokenType.Comma, ","),
+        new Token(TokenType.String, "key-n"),
+        new Token(TokenType.Colon, ":"),
+        new Token(TokenType.Number, "101"),
+        new Token(TokenType.Comma, ","),
+        new Token(TokenType.String, "key-o"),
+        new Token(TokenType.Colon, ":"),
+        new Token(TokenType.LeftCurlyBracket, "{"),
+        new Token(TokenType.String, "inner key"),
+        new Token(TokenType.Colon, ":"),
+        new Token(TokenType.String, "inner value"),
+        new Token(TokenType.RightCurlyBracket, "}"),
+        new Token(TokenType.Comma, ","),
+        new Token(TokenType.String, "key-l"),
+        new Token(TokenType.Colon, ":"),
+        new Token(TokenType.LeftArrayBracket, "["),
+        new Token(TokenType.String, "list value1"),
+        new Token(TokenType.Comma, ","),
+        new Token(TokenType.String, "list value2"),
+        new Token(TokenType.RightArrayBracket, "]"),
+        new Token(TokenType.RightCurlyBracket, "}"),
+      };
+      Assert.Equal(expectedTokens.Count, tokens.Count);
+
+      for(int i = 0; i < expectedTokens.Count; ++i) 
+      {
+        Assert.Equal(expectedTokens[i], tokens[i]);
+      }
+    }
+
     private void PrintOutput(string testOutput)
     {
       output.WriteLine($"{testOutput}");

@@ -8,6 +8,12 @@ public enum TokenType
     String,
     Colon,
     Comma,
+    Number,
+    True,
+    False,
+    Null,
+    LeftArrayBracket,
+    RightArrayBracket,
 }
 
 public struct Token : IEquatable<Token>

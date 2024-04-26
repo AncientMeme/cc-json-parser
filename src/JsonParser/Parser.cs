@@ -16,13 +16,27 @@ public class Parser
 
   private object ParseValue()
   {
-    var token = PeepToken();
+    var token = PeekToken();
     switch(token.type)
     {
       case TokenType.LeftCurlyBracket:
         return ParseObject();
       case TokenType.String:
         return ParseString();
+      case TokenType.Number:
+        var numberToken = PopToken();
+        return int.Parse(numberToken.value);
+      case TokenType.True:
+        PopToken();
+        return true;
+      case TokenType.False:
+        PopToken();
+        return false;
+      case TokenType.Null:
+        PopToken();
+        return null;
+      case TokenType.LeftArrayBracket:
+        return ParseArray();
       default:
         throw new InvalidDataException($"Invalid token type as value {token.type}");
     }
@@ -38,13 +52,13 @@ public class Parser
     while (tokenIndex < tokens.Count) 
     {
       // Passed through a comma but no key value pair left
-      if (parsedComma && PeepToken().type == TokenType.RightCurlyBracket)
+      if (parsedComma && PeekToken().type == TokenType.RightCurlyBracket)
       {
         throw new InvalidDataException("Extra trailing comma at the final key value pair");
       }
 
       // Check for right bracket
-      if (PeepToken().type == TokenType.RightCurlyBracket)
+      if (PeekToken().type == TokenType.RightCurlyBracket)
       {
         PopToken();
         return output;
@@ -61,12 +75,12 @@ public class Parser
       output[key] = value;
 
       // Check if next key value pair exists
-      if (PeepToken().type == TokenType.RightCurlyBracket)
+      if (PeekToken().type == TokenType.RightCurlyBracket)
       {
         PopToken();
         return output;
       }
-      else if (PeepToken().type == TokenType.Comma)
+      else if (PeekToken().type == TokenType.Comma)
       {
         parsedComma = true;
         PopToken();
@@ -80,9 +94,45 @@ public class Parser
     throw new InvalidDataException("Object does not have closing bracket");
   }
 
+  private object[] ParseArray()
+  {
+    var output = new List<object>();
+    // Left array bracket token
+    PopToken();
+    while (tokenIndex < tokens.Count) 
+    {
+      // Check if its closed
+      if (PeekToken().type == TokenType.RightArrayBracket)
+      {
+        PopToken();
+        return output.ToArray();
+      }
+      // Get token value
+      var val = ParseValue();
+      output.Add(val);
+
+      // Check for next value or closing
+      if (PeekToken().type == TokenType.RightArrayBracket)
+      {
+        PopToken();
+        return output.ToArray();
+      }
+      else if (PeekToken().type == TokenType.Comma)
+      {
+        PopToken();
+      }
+      else
+      {
+        throw new InvalidDataException("Invalid token found in Array");
+      }
+    }
+
+    throw new InvalidDataException("Array does not have closing bracket");
+  }
+
   private string ParseString()
   {
-    if (PeepToken().type != TokenType.String)
+    if (PeekToken().type != TokenType.String)
     {
       throw new InvalidDataException("Keys should be String Tokens");
     }
@@ -90,7 +140,7 @@ public class Parser
   }
 
   private void ParseColon() {
-    if (PeepToken().type != TokenType.Colon)
+    if (PeekToken().type != TokenType.Colon)
     {
       throw new InvalidDataException("Colon should follow Key");
     }
@@ -113,7 +163,7 @@ public class Parser
    
   }
 
-  private Token PeepToken()
+  private Token PeekToken()
   {
     if (tokenIndex < tokens.Count) 
     {
@@ -123,14 +173,5 @@ public class Parser
     {
       throw new InvalidDataException("Invalid Peek: There are no more tokens left'");
     }
-  }
-
-  private void PrintTokens()
-  {
-    foreach (Token t in tokens)
-    {
-      Console.WriteLine($"Token Type: {t.type}, Token Value: {t.value}");
-    }
-    Console.WriteLine("------------------------------------");
   }
 }

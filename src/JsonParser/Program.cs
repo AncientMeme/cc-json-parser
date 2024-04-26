@@ -27,15 +27,15 @@ void parseJson(FileInfo? file)
   }
 
   var lexer = new Lexer(content);
+  Dictionary<string, object> dict;
   try 
   {
     var tokens = lexer.GetTokens();
     var parser = new Parser(tokens);
-    Dictionary<string, object> dict = parser.ParseObject();
+    dict = (Dictionary<string, object>)parser.ParseTokens();
   }
   catch (InvalidDataException e)
   {
     Console.WriteLine($"Invalid JSON format: {e.Message}");
   }
-  
 }
